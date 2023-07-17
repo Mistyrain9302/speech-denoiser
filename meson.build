@@ -22,7 +22,13 @@ nr_dep = [m_dep,lv2_dep,lib_rnnoise]
 if meson.get_compiler('c').get_id() == 'clang'
   add_global_arguments('-mrecip', language : 'c')
 endif
-cflags = ['-msse','-msse2','-mfpmath=sse','-ffast-math','-fomit-frame-pointer','-fno-finite-math-only']
+
+# Add condition for sse flags
+if host_machine.cpu_family() == 'x86_64'
+  cflags = ['-msse','-msse2','-mfpmath=sse','-ffast-math','-fomit-frame-pointer','-fno-finite-math-only']
+else
+  cflags = ['-ffast-math','-fomit-frame-pointer','-fno-finite-math-only']
+endif
 
 #install folder
 install_folder = 'sdenoise.lv2'
